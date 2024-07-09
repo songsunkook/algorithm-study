@@ -24,8 +24,8 @@ public class Main {
     }
 
     static long func(long a, long b, long c) {
-        if (b <= 1) {
-            return a % c;
+        if (b == 0) {
+            return 1;
         }
         long num = func(a, b / 2, c);
         num = num * num % c;
