@@ -33,8 +33,6 @@ public class Main {
             d[i][1] = Math.max(d[i - 1][0], Math.max(d[i - 2][1], d[i - 2][2])) + arr[i];
             d[i][2] = d[i - 1][1] + arr[i];
         }
-        int a = Math.max(d[n - 1][1], d[n - 1][2]);
-        int b = Math.max(d[n][1], d[n][2]);
-        System.out.print(Math.max(a, b));
+        System.out.print(Math.max(Math.max(d[n][0], d[n][1]), d[n][2]));
     }
 }
