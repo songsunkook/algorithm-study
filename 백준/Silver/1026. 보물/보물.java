@@ -3,9 +3,9 @@
     https://www.acmicpc.net/problem/1026
 
     추가 학습 내용
-    - 
+    - Arrays.sort에서 인자로 비교 방법을 람다로 제공하는 방법
 
-    복습 필요: x 
+    복습 필요: x
     풀이 참고: x
 */
 
@@ -32,8 +32,7 @@ public class Main {
         for (int i = 0; i < N; i++) {
             B[i].a = A[i];
         }
-        // Arrays.sort(B, (a, b) -> Integer.compare(a.idx, b.idx));
-        Arrays.sort(B);
+        Arrays.sort(B, (a, b) -> Integer.compare(a.idx, b.idx));
         int sum = 0;
         for (int i = 0; i < N; i++) {
             sum += B[i].a * B[i].n;
