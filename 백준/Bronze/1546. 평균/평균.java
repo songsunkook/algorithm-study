@@ -7,23 +7,16 @@ class Main {
         BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 
         int n = Integer.parseInt(br.readLine());
-        
-        List<Integer> arr = new ArrayList<>();
+        int sum = 0;
+        int M = Integer.MIN_VALUE;
         StringTokenizer st = new StringTokenizer(br.readLine());
-        for(int i=0;i<n;i++) {
-            arr.add(Integer.parseInt(st.nextToken()));
+        for (int i = 0; i < n; i++) {
+            int a = Integer.parseInt(st.nextToken());
+            sum += a;
+            M = Math.max(a, M);
         }
-        int M = Collections.max(arr);
 
-        List<Double> arr2 = new ArrayList<>();
-        for (int i=0;i<n;i++) {
-            arr2.add((double)arr.get(i) / M * 100);
-        }
-        double sum = 0;
-        for(int i=0;i<n;i++) {
-            sum += arr2.get(i);
-        }
-        bw.write(String.format("%.3f", sum / n));
+        bw.write(String.format("%.3f", (double) sum / M * 100 / n));
         bw.close();
         br.close();
     }
