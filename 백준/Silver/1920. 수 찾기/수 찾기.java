@@ -1,49 +1,40 @@
 import java.io.*;
-import java.util.Arrays;
-import java.util.StringTokenizer;
+import java.util.*;
 
-public class Main {
+class Main {
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 
-        StringTokenizer st = new StringTokenizer(br.readLine(), " ");
-        int n = Integer.parseInt(st.nextToken());
-        int[] source = new int[n+1];
-
-        st = new StringTokenizer(br.readLine(), " ");
+        int n = Integer.parseInt(br.readLine());
+        int[] arr = new int[n];
+        StringTokenizer st = new StringTokenizer(br.readLine());
         for (int i = 0; i < n; i++) {
-            source[i] = Integer.parseInt(st.nextToken());
+            arr[i] = Integer.parseInt(st.nextToken());
         }
-        source[n] = 1000000;
-        Arrays.sort(source);
-
-        st = new StringTokenizer(br.readLine(), " ");
-        int m = Integer.parseInt(st.nextToken());
-        st = new StringTokenizer(br.readLine(), " ");
-        int[] target = new int[m];
+        Arrays.sort(arr);
+        int m = Integer.parseInt(br.readLine());
+        st = new StringTokenizer(br.readLine());
         for (int i = 0; i < m; i++) {
-            target[i] = Integer.parseInt(st.nextToken());
+            int target = Integer.parseInt(st.nextToken());
+            bw.write(solve(arr, target) ? "1\n" : "0\n");
         }
-        for (int i = 0; i < m; i++) {
-            int low = 0, high = n;
-            while (high - low > 1) {
-                if (source[high] == target[i]) {
-                    low = high;
-                    break;
-                }
-                int mid = (high + low) / 2;
-                if (source[mid] > target[i]) {
-                    high = mid;
-                } else {
-                    low = mid;
-                }
-            }
-            bw.write(Integer.toString(source[low] == target[i] ? 1 : 0) + '\n');
-        }
-
-        bw.flush();
         bw.close();
         br.close();
+    }
+
+    private static boolean solve(int[] arr, int target) {
+        int l = 0;
+        int r = arr.length - 1;
+        while (l <= r) {
+            int mid = (l + r) / 2;
+            if (target < arr[mid])
+                r = mid - 1;
+            else if (arr[mid] < target)
+                l = mid + 1;
+            else
+                return true;
+        }
+        return false;
     }
 }
