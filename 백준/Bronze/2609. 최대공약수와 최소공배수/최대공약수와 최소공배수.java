@@ -18,8 +18,8 @@ class Main {
             }
         }
 
-        for (int i = Math.max(a, b);; i++) {
-            if (i % a == 0 && i % b == 0) {
+        for (int i = a;; i += a) {
+            if (i % b == 0) {
                 bw.write(i + "");
                 break;
             }
