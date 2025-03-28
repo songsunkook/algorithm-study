@@ -11,12 +11,7 @@ class Main {
         int a = Integer.parseInt(st.nextToken());
         int b = Integer.parseInt(st.nextToken());
 
-        for (int i = Math.min(a, b); i > 0; i--) {
-            if (a % i == 0 && b % i == 0) {
-                bw.write(i + "\n");
-                break;
-            }
-        }
+        bw.write(gcd(a, b) + "\n");
 
         for (int i = a;; i += a) {
             if (i % b == 0) {
@@ -27,5 +22,11 @@ class Main {
 
         bw.close();
         br.close();
+    }
+
+    private static int gcd(int a, int b) {
+        if (b == 0)
+            return a;
+        return gcd(b, a % b);
     }
 }
