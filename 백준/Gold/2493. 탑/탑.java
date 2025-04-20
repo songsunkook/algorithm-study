@@ -1,38 +1,42 @@
-/*
-    BAEKJOON 2493번 탑
-    https://www.acmicpc.net/problem/2493
-    
-    복습 필요 - 풀이 참조함
-*/
-
 import java.io.*;
 import java.util.*;
 
-public class Main {
-
+class Main {
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        int N = Integer.parseInt(br.readLine());
+        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+
+        int n = Integer.parseInt(br.readLine());
+        Stack<Pair> stack = new Stack<>();
         StringTokenizer st = new StringTokenizer(br.readLine());
-        int[] tower = new int[N];
-        for (int i = 0; i < N; i++) {
-            tower[i] = Integer.parseInt(st.nextToken());
-        }
-        List<Integer> result = new ArrayList<>(N);
-        Stack<Integer> stack = new Stack<>();
-        for (int i=0;i<N;i++) {
-            while (!stack.empty() && tower[stack.peek()] < tower[i]) {
-                stack.pop();
+        stack.push(new Pair(1, Integer.parseInt(st.nextToken())));
+        bw.write("0 ");
+        for (int i = 1; i < n; i++) {
+            int h = Integer.parseInt(st.nextToken());
+            if (stack.peek().h <= h) {
+                while (!stack.isEmpty() && stack.peek().h <= h) {
+                    stack.pop();
+                }
             }
-            if (stack.empty()) {
-                result.add(0);
-            } else {
-                result.add(stack.peek() + 1);
-            }
-            stack.push(i);
+            if (stack.isEmpty())
+                bw.write("0 ");
+            else
+                bw.write(stack.peek().pos + " ");
+
+            stack.push(new Pair(i + 1, h));
         }
-        for (int i=0;i<N;i++){
-            System.out.print(result.get(i) + " ");
+
+        bw.close();
+        br.close();
+    }
+
+    static class Pair {
+        int pos;
+        int h;
+
+        public Pair(int pos, int h) {
+            this.pos = pos;
+            this.h = h;
         }
     }
 }
