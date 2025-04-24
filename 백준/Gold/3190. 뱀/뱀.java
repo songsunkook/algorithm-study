@@ -131,15 +131,8 @@ class Main {
 
         @Override
         public boolean equals(Object o) {
-            if (this == o) return true;
-            if (!(o instanceof Pos)) return false;
             Pos other = (Pos) o;
             return r == other.r && c == other.c;
-        }
-
-        @Override
-        public int hashCode() {
-            return Objects.hash(r, c);
         }
     }
 }
