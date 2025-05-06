@@ -25,17 +25,15 @@ class Main {
         }
 
         long l = 1, r = max;
-        long result = 0;
         while (l <= r) {
             long mid = (l + r) / 2;
             if (countOf(arr, mid) >= k) {
-                result = mid;
                 l = mid + 1;
             } else {
                 r = mid - 1;
             }
         }
-        bw.write(result + "");
+        bw.write(r + "");
 
         bw.close();
         br.close();
