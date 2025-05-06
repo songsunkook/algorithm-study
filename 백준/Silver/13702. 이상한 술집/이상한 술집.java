@@ -41,10 +41,10 @@ class Main {
         br.close();
     }
 
-    static long countOf(int[] arr, long thre) {
-        long result = 0;
+    static int countOf(int[] arr, long thre) {
+        int result = 0;
         for (int i = 0; i < arr.length; i++) {
-            result += (long) arr[i] / thre;
+            result += arr[i] / thre;
         }
         return result;
     }
