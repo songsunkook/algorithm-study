@@ -39,35 +39,37 @@ class Main {
     static int[][] drc = { { -1, 0 }, { 0, 1 }, { 1, 0 }, { 0, -1 } };
 
     static int bfs(int r, int c) {
+        int depth = -1;
         Queue<P> q = new LinkedList<>();
         boolean[][] vis = new boolean[R][C];
         vis[r][c] = true;
-        q.offer(new P(r, c, 0));
-        int maxDist = 0;
+        q.offer(new P(r, c));
+        // System.out.printf("[%d, %d] ", r, c);
         while (!q.isEmpty()) {
-            P cur = q.poll();
-            maxDist = Math.max(maxDist, cur.dist);
-            for (var z : drc) {
-                P n = new P(cur.r + z[0], cur.c + z[1], cur.dist + 1);
-                if (n.isInBoard() && arr[n.r][n.c] == 'L' && !vis[n.r][n.c]) {
-                    vis[n.r][n.c] = true;
-                    q.offer(n);
-                    // System.out.printf("[%d, %d] ", n.r, n.c);
+            int qSize = q.size();
+            for (int i = 0; i < qSize; i++) {
+                P cur = q.poll();
+                for (var z : drc) {
+                    P n = new P(cur.r + z[0], cur.c + z[1]);
+                    if (n.isInBoard() && arr[n.r][n.c] == 'L' && !vis[n.r][n.c]) {
+                        vis[n.r][n.c] = true;
+                        q.offer(n);
+                        // System.out.printf("[%d, %d] ", n.r, n.c);
+                    }
                 }
             }
+            depth++;
         }
-        return maxDist;
+        return depth;
     }
 
     static class P {
         int r;
         int c;
-        int dist;
 
-        P(int rr, int cc, int d) {
+        P(int rr, int cc) {
             r = rr;
             c = cc;
-            dist = d;
         }
 
         boolean isInBoard() {
