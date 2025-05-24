@@ -41,7 +41,7 @@ class Main {
                         && arr[next.l][next.n]
                         && next.n > next.d) {
 
-                    if (next.n > n + 1) {
+                    if (next.n > n) {
                         result = true;
                         break;
                     }
