@@ -51,6 +51,6 @@ class Main {
                 vis[next] = false;
             }
         }
-        path.remove(Integer.valueOf(cur));
+        path.remove(path.size() - 1);
     }
 }
