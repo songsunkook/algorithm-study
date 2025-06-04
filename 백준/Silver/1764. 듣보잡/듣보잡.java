@@ -13,8 +13,8 @@ class Main {
         StringTokenizer st = new StringTokenizer(br.readLine());
         n = Integer.parseInt(st.nextToken());
         m = Integer.parseInt(st.nextToken());
-        arr1 = new TreeSet<>();
-        arr2 = new TreeSet<>();
+        arr1 = new HashSet<>();
+        arr2 = new HashSet<>();
         for (int i = 0; i < n; i++) {
             arr1.add(br.readLine());
         }
@@ -29,7 +29,7 @@ class Main {
                 result.add(a);
             }
         }
-        // Collections.sort(result);
+        Collections.sort(result);
         bw.write(result.size() + "\n");
         for (var a : result)
             bw.write(a + "\n");
