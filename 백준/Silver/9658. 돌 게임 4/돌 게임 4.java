@@ -25,26 +25,17 @@ class Main {
 
     static int[] dd = { 4, 3, 1 };
 
-    static Boolean func(int num) {
+    static boolean func(int num) {
         if (dp[num] != null)
             return dp[num];
 
-        boolean nextAllNull = true;
         for (int d : dd) {
-            var result = func(num - d);
-            if (result != null)
-                nextAllNull = false;
-            if (result == Boolean.FALSE) {
+            if (!func(num - d)) {
                 dp[num] = true;
                 return true;
             }
         }
-        if (nextAllNull) {
-            dp[num] = true;
-            return true;
-        } else {
-            dp[num] = false;
-            return false;
-        }
+        dp[num] = false;
+        return false;
     }
 }
