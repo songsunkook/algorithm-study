@@ -2,41 +2,35 @@ import java.io.*;
 import java.util.*;
 
 class Main {
-    static int[][] dd = { { -1, 0 }, { 0, 1 }, { 1, 0 }, { 0, -1 } };
-    static int[][] board = { { 1, 2, 3 }, { 4, 5, 6 }, { 7, 8, 9 }, { 0, -1, -1 } };
-
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 
-        int T = Integer.parseInt(br.readLine());
         long[][] dp = new long[1001][10];
-        Arrays.fill(dp[1], 1L);
-
+        int T = Integer.parseInt(br.readLine());
+        Arrays.fill(dp[1], 1);
         for (int t = 0; t < T; t++) {
-            int n = Integer.parseInt(br.readLine());
-
-            for (int i = 2; i <= n; i++) {
-                if (dp[i][9] != 0)
+            int TIME = Integer.parseInt(br.readLine());
+            for (int time = 2; time <= TIME; time++) {
+                if (dp[time][0] != 0)
                     continue;
-                for (int j = 0; j < 10; j++) {
-                    for (int side : getSide(j)) {
-                        dp[i][j] += dp[i - 1][side] % 1234567;
+                for (int num = 0; num < 10; num++) {
+                    for (int side : getSide(num)) {
+                        dp[time][num] += dp[time - 1][side] % 1234567;
                     }
-                    dp[i][j] %= 1234567;
                 }
             }
-
-            long total = 0;
+            long sum = 0;
             for (int i = 0; i < 10; i++)
-                total += dp[n][i];
-            total %= 1234567;
-            bw.write(total + "\n");
+                sum += dp[TIME][i] % 1234567;
+            bw.write(sum % 1234567 + "\n");
         }
-
         bw.close();
         br.close();
     }
+
+    static int[][] dd = { { -1, 0 }, { 0, 1 }, { 1, 0 }, { 0, -1 } };
+    static int[][] board = { { 1, 2, 3 }, { 4, 5, 6 }, { 7, 8, 9 }, { 0, -1, -1 } };
 
     static List<Integer> getSide(int num) {
         int r = 0, c = 0;
