@@ -3,17 +3,42 @@ import java.util.*;
 
 class Main {
     /**
-     * 1 -> 0 1 2 3 4 5 6 7 8 9
-     * 2 -> 00 01~11 01~22 01~33(01 02 ..) ... 01~88 01~99
-     * 3 -> 000 001~111 001~222 001~333 ... 001~999
+     * 0000
+     * 1111
+     * 1234
      * 
-     * dp[1] = 10
-     * dp[2] = 10 + 9 + 8 + ... + 2 + 1 (dp[1]!)
-     * dp[3] = sum(dp[2]) + (dp[3][0] - dp[2][0]) + (dp[3][1] - dp[2][1])
+     * 앞의 수는 뒤의 수에 의존적이다.
+     * 뒷자리 수를 기반으로 진행해야 한다.
      * 
-     * dp[i][j] = dp[i][j-1] - dp[i-1][j-1];
+     * n = 1
+     * 0
+     * 1
+     * 2
      * 
-     * result = sum(dp[n][i])
+     * n = 2
+     * 00
+     * 01 11
+     * 02 12 22
+     * 
+     * n = 3
+     * 000
+     * 001 011 111
+     * 002 012 022 112 122 222
+     * 
+     * n = 4
+     * 0000
+     * 0001 0011 0111 1111
+     * 0002 0012 0022 0112 0122 0222 1112 1122 1222 2222
+     * 
+     * dp[n][i] = n자리 수에서 끝이 i일 때 경우의 수
+     * 1 2 3 4(n)
+     * 0 1 1 1 1
+     * 1 1 1 3 4
+     * 2 1 2 6 10
+     * (i)
+     * 
+     * dp[n][i] = dp[n-1][i] + dp[n][i-1]
+     * 
      */
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -24,14 +49,14 @@ class Main {
         Arrays.fill(dp[1], 1);
         for (int i = 2; i <= n; i++) {
             dp[i][0] = 1;
-            for (int j = 1; j < 10; j++) {
-                dp[i][j] = (dp[i][j - 1] + dp[i - 1][j]) % 10007;
+            for (int digit = 1; digit < 10; digit++) {
+                dp[i][digit] = (dp[i - 1][digit] + dp[i][digit - 1]) % 10007;
             }
         }
         long sum = 0;
-        for (int i = 0; i < 10; i++)
+        for (int i = 0; i <= 9; i++) {
             sum += dp[n][i] % 10007;
-
+        }
         bw.write(sum % 10007 + "");
         bw.close();
         br.close();
