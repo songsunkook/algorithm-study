@@ -7,18 +7,21 @@ class Main {
         BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 
         long n = Long.parseLong(br.readLine());
-        long l = 0;
-        long r = n;
-        long mid = r;
+        long l = 0, r = 10000000000L;
+        long mid = 0;
         while (l < r) {
-            mid = (l + r) / 2;
-            double result = Math.pow(mid, 2);
-            if (result < n)
+            mid = l / 2 + r / 2;
+            double cur = (double)mid * mid;
+            if (cur == n) {
+                break;
+            }
+            if (cur < n) {
                 l = mid + 1;
-            else
+            } else {
                 r = mid;
+            }
         }
-        bw.write(r + "\n");
+        bw.write((mid * mid < n) ? mid + 1 + "" : mid + "");
         bw.close();
         br.close();
     }
