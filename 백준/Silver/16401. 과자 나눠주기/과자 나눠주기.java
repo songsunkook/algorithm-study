@@ -10,36 +10,27 @@ class Main {
         int m = Integer.parseInt(st.nextToken());
         int n = Integer.parseInt(st.nextToken());
         int[] arr = new int[n];
-        int max = 0;
         st = new StringTokenizer(br.readLine());
+        int max = 0;
         for (int i = 0; i < n; i++) {
             arr[i] = Integer.parseInt(st.nextToken());
-            max = Math.max(arr[i], max);
+            max = Math.max(max, arr[i]);
         }
 
-        int l = 1, r = max;
-        int result = 0;
-        while (l <= r) {
+        int l = 0, r = max + 1;
+        while (l + 1 < r) {
             int mid = (l + r) / 2;
-            if (countOf(arr, mid) >= m) {
-                result = mid;
-                l = mid + 1;
-            } else {
-                r = mid - 1;
-            }
+            int cur = 0;
+            for (int i = 0; i < n; i++)
+                cur += arr[i] / mid;
+            if (cur < m)
+                r = mid;
+            else
+                l = mid;
         }
-
-        bw.write(result + "");
+        bw.write(l + "");
 
         bw.close();
         br.close();
-    }
-
-    static int countOf(int[] arr, int splitVal) {
-        int result = 0;
-        for (int i = 0; i < arr.length; i++) {
-            result += arr[i] / splitVal;
-        }
-        return result;
     }
 }
