@@ -1,50 +1,44 @@
 import java.io.*;
 import java.util.*;
 
-public class Main {
-    static int N, M;
+class Main {
+
+    static int v, e;
     static int[][] dist;
-    static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-    static BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
-    static StringTokenizer st;
 
     public static void main(String[] args) throws IOException {
-        st = new StringTokenizer(br.readLine());
-        N = Integer.parseInt(st.nextToken());
-        st = new StringTokenizer(br.readLine());
-        M = Integer.parseInt(st.nextToken());
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 
-        dist = new int[N][N];
-        for (int i = 0; i < N; i++) {
-            Arrays.fill(dist[i], 1000000000);
+        v = Integer.parseInt(br.readLine());
+        e = Integer.parseInt(br.readLine());
+        dist = new int[v + 1][v + 1];
+        for (int i = 1; i <= v; i++) {
+            Arrays.fill(dist[i], Integer.MAX_VALUE);
             dist[i][i] = 0;
         }
-
-        for (int i = 0; i < M; i++) {
-            st = new StringTokenizer(br.readLine());
-            int a = Integer.parseInt(st.nextToken()) - 1;
-            int b = Integer.parseInt(st.nextToken()) - 1;
+        for (int i = 0; i < e; i++) {
+            StringTokenizer st = new StringTokenizer(br.readLine());
+            int a = Integer.parseInt(st.nextToken());
+            int b = Integer.parseInt(st.nextToken());
             int c = Integer.parseInt(st.nextToken());
-            dist[a][b] = Math.min(c, dist[a][b]);
+            dist[a][b] = Math.min(dist[a][b], c);
         }
-
-        for (int k = 0; k < N; k++) {
-            for (int i = 0; i < N; i++) {
-                for (int j = 0; j < N; j++) {
-                    dist[i][j] = Math.min(dist[i][j], dist[i][k] + dist[k][j]);
+        for (int k = 1; k <= v; k++) {
+            for (int i = 1; i <= v; i++) {
+                for (int j = 1; j <= v; j++) {
+                    if (dist[i][k] != Integer.MAX_VALUE && dist[k][j] != Integer.MAX_VALUE)
+                        dist[i][j] = Math.min(dist[i][j], dist[i][k] + dist[k][j]);
                 }
             }
         }
 
-        for (int i = 0; i < N; i++) {
-            for (int j = 0; j < N; j++) {
-                bw.write(Integer.toString(dist[i][j] == 1000000000 ? 0 : dist[i][j]) + ' ');
+        for (int i = 1; i <= v; i++) {
+            for (int j = 1; j <= v; j++) {
+                bw.write(dist[i][j] == Integer.MAX_VALUE ? "0 " : dist[i][j] + " ");
             }
-            bw.write('\n');
+            bw.write("\n");
         }
-
-
-        bw.flush();
         bw.close();
         br.close();
     }
