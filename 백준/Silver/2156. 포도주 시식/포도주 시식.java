@@ -1,38 +1,48 @@
-/*
-    BAEKJOON 2156번 포도주 시식
-    https://www.acmicpc.net/problem/2156
-
-    추가 학습 내용
-    - 
-
-    복습 필요: O
-    풀이 참고: O
-*/
-
 import java.io.*;
 import java.util.*;
 
-public class Main {
+/*
+ * dp[i] = i번째 포도주를 마시는 가장 큰 값
+ * dp[i] = Math.max(dp[i-2] + arr[i], dp[i-3] + arr[i-1] + arr[i])
+ */
 
+class Main {
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+
         int n = Integer.parseInt(br.readLine());
-        int[] arr = new int[n + 1];
-        for (int i = 1; i <= n; i++) {
+        int[] arr = new int[n];
+        int[] dp = new int[n];
+        for (int i = 0; i < n; i++) {
             arr[i] = Integer.parseInt(br.readLine());
         }
-        int[][] d = new int[n + 1][3];
-        d[1][1] = arr[1];
-        d[1][2] = 0;
-        if (n >= 2) {
-            d[2][1] = arr[2];
-            d[2][2] = arr[1] + arr[2];
+
+        if (n == 1) {
+            bw.write(arr[0] + "");
+        } else if (n == 2) {
+            bw.write(arr[0] + arr[1] + "");
+        } else if (n == 3) {
+            bw.write(Math.max(Math.max(arr[0] + arr[2], arr[1] + arr[2]), arr[0] + arr[1]) + "");
+        } else {
+            dp[0] = arr[0];
+            dp[1] = arr[0] + arr[1];
+            dp[2] = Math.max(arr[0] + arr[2], arr[1] + arr[2]);
+            dp[2] = Math.max(dp[2], arr[0] + arr[1]);
+            dp[3] = Math.max(dp[0] + arr[2] + arr[3], dp[1] + arr[3]);
+            for (int i = 4; i < n; i++) {
+                // int max = 0;
+                // for (int j = 0; j < i; j++) {
+                // max = Math.max(max, dp[i]);
+                // }
+                dp[i] = Math.max(dp[i - 3] + arr[i - 1] + arr[i], dp[i - 2] + arr[i]);
+                dp[i] = Math.max(dp[i], dp[i - 4] + arr[i - 1] + arr[i]);
+                // dp[i] = Math.max(max - arr[i-1] + arr[i], max);
+            }
+            bw.write(Math.max(dp[n - 1], dp[n - 2]) + "");
         }
-        for (int i = 3; i <= n; i++) {
-            d[i][0] = Math.max(d[i - 1][0], Math.max(d[i - 1][1], d[i - 1][2]));
-            d[i][1] = Math.max(d[i - 1][0], Math.max(d[i - 2][1], d[i - 2][2])) + arr[i];
-            d[i][2] = d[i - 1][1] + arr[i];
-        }
-        System.out.print(Math.max(Math.max(d[n][0], d[n][1]), d[n][2]));
+
+        bw.close();
+        br.close();
     }
 }
