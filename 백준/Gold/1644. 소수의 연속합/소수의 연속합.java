@@ -25,9 +25,8 @@ class Main {
                 sum -= arr[l++];
             } else {
                 count++;
-                sum -= arr[l++];
-                // bw.write("(" + arr[l] + ", " + arr[r] + "): " + sum + "\n");
-                // sum += arr[r++];
+                // sum -= arr[l++];
+                sum += arr[r++];
             }
             if (arr[r - 1] == 0)
                 break;
