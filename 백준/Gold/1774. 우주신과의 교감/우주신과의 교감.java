@@ -4,7 +4,8 @@ import java.util.*;
 class Main {
     static double INF = 1000000000;
     static P[] arr;
-    static int[] p;
+    static boolean[] vis;
+    static boolean[][] adj;
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -14,63 +15,52 @@ class Main {
         int n = Integer.parseInt(st.nextToken());
         int m = Integer.parseInt(st.nextToken());
         arr = new P[n + 1];
-        p = new int[n + 1];
+        vis = new boolean[n + 1];
+        adj = new boolean[n + 1][n + 1];
         for (int i = 1; i <= n; i++) {
             st = new StringTokenizer(br.readLine());
             int x = Integer.parseInt(st.nextToken());
             int y = Integer.parseInt(st.nextToken());
             arr[i] = new P(x, y);
-            p[i] = i;
         }
+        PriorityQueue<E> q = new PriorityQueue<>((a, b) -> Double.compare(a.d, b.d));
         for (int i = 1; i <= m; i++) {
             st = new StringTokenizer(br.readLine());
             int a = Integer.parseInt(st.nextToken());
             int b = Integer.parseInt(st.nextToken());
-            union(a, b);
+            adj[a][b] = true;
+            adj[b][a] = true;
         }
-        List<E> edges = new ArrayList<>();
-        for (int i = 1; i <= n; i++) {
-            for (int j = i + 1; j <= n; j++) {
-                edges.add(new E(i, j, dis(arr[i], arr[j])));
-            }
-        }
-        Collections.sort(edges, (a, b) -> Double.compare(a.d, b.d));
-
         double sum = 0;
-        for (var edge : edges) {
-            if (find(edge.s) == find(edge.e))
+        for (int i = 2; i <= n; i++) {
+            q.offer(new E(1, i, dis(1, i)));
+        }
+        vis[1] = true;
+        while (!q.isEmpty()) {
+            var cur = q.poll();
+            if (vis[cur.e]) {
                 continue;
-            union(edge.s, edge.e);
-            sum += edge.d;
+            }
+            vis[cur.e] = true;
+            sum += cur.d;
+            for (int i = 1; i <= n; i++) {
+                if (i == cur.s || vis[i])
+                    continue;
+                q.offer(new E(cur.e, i, dis(cur.e, i)));
+            }
         }
         bw.write(String.format("%.2f", sum));
         bw.close();
         br.close();
     }
 
-    static void union(int a, int b) {
-        int pa = find(a);
-        int pb = find(b);
-        if (pa != pb) {
-            if (pa < pb) {
-                p[pb] = pa;
-            } else {
-                p[pa] = pb;
-            }
-        }
-    }
-
-    static int find(int a) {
-        if (p[a] != a)
-            p[a] = find(p[a]);
-        return p[a];
-    }
-
-    static double dis(P a, P b) {
-        long ax = a.x;
-        long ay = a.y;
-        long bx = b.x;
-        long by = b.y;
+    static double dis(int a, int b) {
+        if (adj[a][b])
+            return 0;
+        long ax = arr[a].x;
+        long ay = arr[a].y;
+        long bx = arr[b].x;
+        long by = arr[b].y;
         return Math.sqrt((ax - bx) * (ax - bx) + (ay - by) * (ay - by));
     }
 
