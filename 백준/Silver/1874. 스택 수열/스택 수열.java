@@ -1,67 +1,36 @@
 import java.io.*;
 import java.util.*;
 
-public class Main {
-
+class Main {
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 
-        StringTokenizer st = new StringTokenizer(br.readLine());
-        int n = Integer.parseInt(st.nextToken());
-        int[] arr = new int[n];
+        StringBuilder sb = new StringBuilder();
+        int n = Integer.parseInt(br.readLine());
         Stack<Integer> stack = new Stack<>();
+        int num = 1;
         for (int i = 0; i < n; i++) {
-            st = new StringTokenizer(br.readLine());
-            arr[i] = Integer.parseInt(st.nextToken());
-        }
-        int topNumber = 0;
-        boolean NO = false;
-        StringBuilder answer = new StringBuilder();
-        for (int i = 0; i < n; i++) {
-            while (true) {
-                if (topNumber < arr[i]) {
-                    topNumber++;
-                    stack.push(topNumber);
-                    answer.append("+\n");
+            int input = Integer.parseInt(br.readLine());
+            if (input >= num) {
+                while (input >= num) {
+                    stack.push(num++);
+                    sb.append("+\n");
                 }
-                if (topNumber == arr[i]) {
-                    answer.append("-\n");
-                    if (!pop(stack)) {
-                        NO = true;
-                    }
-                    break;
+                stack.pop();
+                sb.append("-\n");
+            } else {
+                if (input < stack.pop()) {
+                    bw.write("NO");
+                    bw.close();
+                    br.close();
+                    return;
                 }
-                if (topNumber > arr[i]) {
-                    if (!stack.contains(arr[i])) {
-                        NO = true;
-                    }
-                    answer.append("-\n");
-                    if (!pop(stack)) {
-                        NO = true;
-                    }
-                    break;
-                }
-            }
-            if (NO) {
-                break;
+                sb.append("-\n");
             }
         }
-        if (NO) {
-            bw.write("NO");
-        } else {
-            bw.write(answer.toString());
-        }
-        bw.flush();
+        bw.write(sb.toString());
         bw.close();
         br.close();
-    }
-
-    static boolean pop(Stack stack) {
-        if (stack.isEmpty()) {
-            return false;
-        }
-        stack.pop();
-        return true;
     }
 }
