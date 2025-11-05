@@ -7,23 +7,25 @@ class Main {
         BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 
         StringTokenizer st = new StringTokenizer(br.readLine());
+
         int N = Integer.parseInt(st.nextToken());
         int M = Integer.parseInt(st.nextToken());
-        long[] sum = new long[N + 1];
-        long[] c = new long[M];
         st = new StringTokenizer(br.readLine());
-        long result = 0;
+        int[] S = new int[N + 1];
+        long[] C = new long[M];
+        long count = 0;
         for (int i = 1; i <= N; i++) {
-            int in = Integer.parseInt(st.nextToken());
-            sum[i] = (in % M + sum[i - 1]) % M;
-            c[(int) sum[i]]++;
-            if (sum[i] == 0)
-                result++;
+            S[i] = (S[i - 1] + Integer.parseInt(st.nextToken())) % M;
+            C[S[i]]++;
+            if (S[i] == 0)
+                count++;
         }
+
         for (int i = 0; i < M; i++) {
-            result += c[i] * (c[i] - 1) / 2;
+            count += C[i] * (C[i] - 1) / 2;
         }
-        bw.write(result + "");
+
+        bw.write(count + "");
         bw.close();
         br.close();
     }
