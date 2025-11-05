@@ -8,32 +8,31 @@ class Main {
 
         int N = Integer.parseInt(br.readLine());
         StringTokenizer st = new StringTokenizer(br.readLine());
-        int[] arr = new int[N];
+        int[] A = new int[N];
         for (int i = 0; i < N; i++) {
-            arr[i] = Integer.parseInt(st.nextToken());
+            A[i] = Integer.parseInt(st.nextToken());
         }
-        Arrays.sort(arr);
-
+        Arrays.sort(A);
         int count = 0;
-        for (int k = 0; k < N; k++) {
-            int find = arr[k];
+        for (int i = 0; i < N; i++) {
             int l = 0, r = N - 1;
             while (l < r) {
-                if (arr[l] + arr[r] == find) {
-                    if (l != k && r != k) {
+                int sum = A[l] + A[r];
+                if (sum == A[i]) {
+                    if (l == i) {
+                        l++;
+                    } else if (r == i) {
+                        r--;
+                    } else {
                         count++;
                         break;
-                    } else {
-                        if (l == k) {
-                            l++;
-                        } else {
-                            r--;
-                        }
                     }
-                } else if (arr[l] + arr[r] > find) {
-                    r--;
-                } else if (arr[l] + arr[r] < find) {
+                }
+                if (sum < A[i]) {
                     l++;
+                }
+                if (sum > A[i]) {
+                    r--;
                 }
             }
         }
