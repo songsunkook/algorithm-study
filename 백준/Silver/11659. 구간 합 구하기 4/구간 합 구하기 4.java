@@ -7,25 +7,29 @@ class Main {
         BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 
         StringTokenizer st = new StringTokenizer(br.readLine());
+        int n = Integer.parseInt(st.nextToken());
+        int m = Integer.parseInt(st.nextToken());
 
-        int N = Integer.parseInt(st.nextToken());
-        int M = Integer.parseInt(st.nextToken());
-        int[] arr = new int[N];
-        int[] sum = new int[N];
+        int[] s = new int[n];
         st = new StringTokenizer(br.readLine());
-        for (int i = 0; i < N; i++) {
-            arr[i] = Integer.parseInt(st.nextToken());
-            if (i != 0)
-                sum[i] = sum[i - 1] + arr[i];
-            else
-                sum[i] = arr[i];
+        for (int i = 0; i < n; i++) {
+            if (i == 0) {
+                s[0] = Integer.parseInt(st.nextToken());
+                continue;
+            }
+            s[i] = s[i - 1] + Integer.parseInt(st.nextToken());
         }
 
-        for (int i = 0; i < M; i++) {
+        for (int i = 0; i < m; i++) {
             st = new StringTokenizer(br.readLine());
-            int s = Integer.parseInt(st.nextToken()) - 1;
-            int e = Integer.parseInt(st.nextToken()) - 1;
-            bw.write(sum[e] - (s > 0 ? sum[s - 1] : 0) + "\n");
+            int a = Integer.parseInt(st.nextToken()) - 1;
+            int b = Integer.parseInt(st.nextToken()) - 1;
+            int result = 0;
+            if (a == 0)
+                result = s[b];
+            else
+                result = s[b] - s[a - 1];
+            bw.write(result + "\n");
         }
 
         bw.close();
