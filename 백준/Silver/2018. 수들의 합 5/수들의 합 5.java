@@ -24,8 +24,8 @@ class Main {
                 r++;
                 sum += r;
             } else {
-                l++;
                 sum -= l;
+                l++;
             }
         }
         bw.write(result + "");
