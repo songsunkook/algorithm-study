@@ -2,19 +2,18 @@ import java.io.*;
 import java.util.*;
 
 class Main {
-
-    static int n, m;
-    static boolean[] vis;
     static List<Integer>[] arr;
+    static boolean[] vis;
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 
         StringTokenizer st = new StringTokenizer(br.readLine());
-        n = Integer.parseInt(st.nextToken());
-        m = Integer.parseInt(st.nextToken());
-        arr = new List[n];
+        int n = Integer.parseInt(st.nextToken());
+        int m = Integer.parseInt(st.nextToken());
+        arr = new ArrayList[n];
+        vis = new boolean[n];
         for (int i = 0; i < n; i++) {
             arr[i] = new ArrayList<>();
         }
@@ -25,33 +24,32 @@ class Main {
             arr[a].add(b);
             arr[b].add(a);
         }
-
-        boolean result = false;
+        boolean flag = false;
         for (int i = 0; i < n; i++) {
-            vis = new boolean[n];
+            vis[i] = true;
             if (dfs(i, 0)) {
-                result = true;
+                flag = true;
                 break;
             }
+            vis[i] = false;
         }
-
-        bw.write(result ? "1" : "0");
+        bw.write(flag ? "1" : "0");
         bw.close();
         br.close();
     }
 
-    static boolean dfs(int cur, int depth) {
-        if (depth >= 4)
+    static boolean dfs(int num, int depth) {
+        if (depth >= 4) {
             return true;
-        vis[cur] = true;
-        int max = 0;
-        for (int fri : arr[cur]) {
-            if (vis[fri])
-                continue;
-            if (dfs(fri, depth + 1))
-                return true;
         }
-        vis[cur] = false;
+        for (int a : arr[num]) {
+            if (!vis[a]) {
+                vis[a] = true;
+                if (dfs(a, depth + 1))
+                    return true;
+                vis[a] = false;
+            }
+        }
         return false;
     }
 }
