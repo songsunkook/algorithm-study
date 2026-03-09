@@ -1,45 +1,41 @@
 import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.StringTokenizer;
+import java.util.*;
 
-public class Main {
-    static int N, M;
-    static int[] data;
-    static boolean[] visited;
-    static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-    static BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
-    static StringTokenizer st;
+class Main {
+
+    static int n, m;
+    static int[] ch;
+    static boolean[] vis;
+    static StringBuilder sb = new StringBuilder();
 
     public static void main(String[] args) throws IOException {
-        st = new StringTokenizer(br.readLine());
-        N = Integer.parseInt(st.nextToken());
-        M = Integer.parseInt(st.nextToken());
-        data = new int[M];
-        visited = new boolean[N];
-
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        n = Integer.parseInt(st.nextToken());
+        m = Integer.parseInt(st.nextToken());
+        ch = new int[m];
+        vis = new boolean[n + 1];
         dfs(0);
-
-        bw.flush();
+        bw.write(sb + "");
         bw.close();
         br.close();
     }
 
-    static void dfs(int depth) throws IOException {
-        if (depth == M) {
-            for (int i = 0; i < M; i++) {
-                bw.write(Integer.toString(data[i]) + ' ');
+    static void dfs(int depth) {
+        if (depth == m) {
+            for (int i = 0; i < m; i++) {
+                sb.append(ch[i] + " ");
             }
-            bw.write('\n');
+            sb.append("\n");
             return;
         }
-
-        for(int i=0;i<N;i++) {
-            if(!visited[i]) {
-                visited[i] = true;
-                data[depth] = i + 1;
+        for (int i = 1; i <= n; i++) {
+            if (!vis[i]) {
+                vis[i] = true;
+                ch[depth] = i;
                 dfs(depth + 1);
-                visited[i] = false;
+                vis[i] = false;
             }
         }
     }
