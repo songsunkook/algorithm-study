@@ -1,45 +1,39 @@
-/*
-    BAEKJOON 17298번 오큰수
-    https://www.acmicpc.net/problem/17298
-
-    추가 학습 내용
-    - BufferedWriter 사용법
-    
-    복습 필요: O
-    풀이 참고: o
-*/
-
 import java.io.*;
 import java.util.*;
 
-public class Main {
-
+class Main {
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
-        int N = Integer.parseInt(br.readLine());
+
+        int n = Integer.parseInt(br.readLine());
         StringTokenizer st = new StringTokenizer(br.readLine());
-        int[] a = new int[N];
-        for (int i = 0; i < N; i++) {
-            a[i] = Integer.parseInt(st.nextToken());
-        }
-        Stack<Integer> stack = new Stack<>();
-        int[] result = new int[N];
-        for (int i = N - 1; i >= 0; i--) {
-            while (!stack.empty() && a[i] >= stack.peek()) {
-                stack.pop();
+        Stack<N> stack = new Stack<>();
+        int[] ans = new int[n];
+        Arrays.fill(ans, -1);
+        for (int i = 0; i < n; i++) {
+            int a = Integer.parseInt(st.nextToken());
+            while (!stack.isEmpty() && stack.peek().n < a) {
+                N p = stack.pop();
+                ans[p.i] = a;
             }
-            if (!stack.empty()) {
-                result[i] = stack.peek();
-            } else {
-                result[i] = -1;
-            }
-            stack.push(a[i]);
+            stack.push(new N(a, i));
         }
-        for (int i = 0; i < N; i++) {
-            bw.write(result[i] + " ");
+        for (int i = 0; i < n; i++) {
+            bw.write(ans[i] + " ");
         }
+
         bw.close();
         br.close();
+    }
+
+    static class N {
+        int n;
+        int i;
+
+        N(int nn, int ii) {
+            n = nn;
+            i = ii;
+        }
     }
 }
