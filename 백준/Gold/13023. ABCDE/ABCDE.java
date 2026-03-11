@@ -2,6 +2,7 @@ import java.io.*;
 import java.util.*;
 
 class Main {
+    static int n, m;
     static List<Integer>[] arr;
     static boolean[] vis;
 
@@ -10,8 +11,8 @@ class Main {
         BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 
         StringTokenizer st = new StringTokenizer(br.readLine());
-        int n = Integer.parseInt(st.nextToken());
-        int m = Integer.parseInt(st.nextToken());
+        n = Integer.parseInt(st.nextToken());
+        m = Integer.parseInt(st.nextToken());
         arr = new ArrayList[n];
         vis = new boolean[n];
         for (int i = 0; i < n; i++) {
@@ -24,30 +25,34 @@ class Main {
             arr[a].add(b);
             arr[b].add(a);
         }
-        boolean flag = false;
         for (int i = 0; i < n; i++) {
-            vis[i] = true;
-            if (dfs(i, 0)) {
-                flag = true;
-                break;
+            if (!vis[i]) {
+                vis[i] = true;
+                if (dfs(i, 1)) {
+                    bw.write("1");
+                    bw.close();
+                    br.close();
+                    return;
+                }
+                vis[i] = false;
             }
-            vis[i] = false;
         }
-        bw.write(flag ? "1" : "0");
+        bw.write("0");
         bw.close();
         br.close();
     }
 
-    static boolean dfs(int num, int depth) {
-        if (depth >= 4) {
+    static boolean dfs(int s, int dep) {
+        if (dep >= 5) {
             return true;
         }
-        for (int a : arr[num]) {
-            if (!vis[a]) {
-                vis[a] = true;
-                if (dfs(a, depth + 1))
+        for (int fri : arr[s]) {
+            if (!vis[fri]) {
+                vis[fri] = true;
+                if (dfs(fri, dep + 1)) {
                     return true;
-                vis[a] = false;
+                }
+                vis[fri] = false;
             }
         }
         return false;
