@@ -13,7 +13,7 @@ class Main {
         n = Integer.parseInt(br.readLine());
         l = new int[n];
         r = new int[n];
-        
+
         for (int i = 0; i < n; i++) {
             StringTokenizer st = new StringTokenizer(br.readLine());
             int a = Integer.parseInt(st.nextToken()) - 1;
@@ -29,32 +29,14 @@ class Main {
         // 반환값: 편도 비용.
         // 마지막 노드였으면 기존 합 + 편도 비용(not 왕복)
 
-        int total = dfs(0);
-        if (total == 1) {
-            bw.write("0");
-        } else {
-            int cur = 0, dep = 0;
-            while (r[cur] != -2) {
-                cur = r[cur];
-                dep++;
-            }
-            bw.write(total * 2 - dep + "");
+        int total = n - 1;
+        int cur = 0, dep = 0;
+        while (r[cur] != -2) {
+            cur = r[cur];
+            dep++;
         }
+        bw.write(total * 2 - dep + "");
         bw.close();
         br.close();
-    }
-
-    static int dfs(int idx) {
-        int ll = 0, rr = 0;
-        if (l[idx] == -2 && r[idx] == -2) {
-            return 0;
-        }
-        if (l[idx] != -2) {
-            ll = dfs(l[idx]) + 1;
-        }
-        if (r[idx] != -2) {
-            rr = dfs(r[idx]) + 1;
-        }
-        return ll + rr;
     }
 }
