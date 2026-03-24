@@ -1,61 +1,67 @@
 import java.io.*;
 import java.util.*;
 
-/**
- * 색종이 크기: 1x1 ~ 5x5
- * 색종이 최소 개수를 구해야 한다. -> 큰 색종이부터 붙여보고 안되면 하나씩 사이즈를 줄인다.
- * 하지만 오히려 작은 색종이를 붙이고 넘어가야 나중에 더 큰 색종이를 붙일 수도 있으니, 모든 사이즈를 붙여봐야 한다.
- */
 class Main {
 
-    static boolean[][] board = new boolean[10][10];
-    static int[] paper = { 0, 5, 5, 5, 5, 5 };
+    static int[] paper = new int[6];
+    static boolean[][] arr;
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 
+        arr = new boolean[10][10];
+        Arrays.fill(paper, 5);
         for (int r = 0; r < 10; r++) {
             StringTokenizer st = new StringTokenizer(br.readLine());
             for (int c = 0; c < 10; c++) {
-                board[r][c] = Integer.parseInt(st.nextToken()) == 1;
+                arr[r][c] = Integer.parseInt(st.nextToken()) == 1;
             }
         }
-        int ans = dfs(0, 0);
-        bw.write(ans == 99999999 ? "-1" : (ans + ""));
+
+        int cnt = dfs();
+        bw.write(cnt == Integer.MAX_VALUE ? "-1" : (cnt + ""));
         bw.close();
         br.close();
     }
 
-    static int dfs(int sr, int sc) {
-        for (int r = sr; r < 10; r++) {
+    static int dfs() {
+        int min = Integer.MAX_VALUE;
+        boolean clear = true;
+        for (int r = 0; r < 10; r++) {
             for (int c = 0; c < 10; c++) {
-                if (board[r][c]) {
-                    int min = 99999999;
-                    for (int s = 1; s <= 5; s++) {
+                if (arr[r][c]) {
+                    clear = false;
+                    for (int s = 5; s >= 1; s--) {
                         if (can(r, c, s)) {
-                            paste(r, c, s, false);
-                            min = Math.min(min, dfs(r, c) + 1);
-                            paste(r, c, s, true);
+                            put(r, c, s, false);
+                            int res = dfs();
+                            if (res != Integer.MAX_VALUE) {
+                                min = Math.min(min, res + 1);
+                            }
+                            put(r, c, s, true);
                         }
                     }
                     return min;
                 }
             }
         }
-        return 0;
+        if (clear) {
+            return 0;
+        }
+        return min;
     }
 
-    static boolean can(int R, int C, int s) {
+    static boolean can(int r, int c, int s) {
         if (paper[s] <= 0) {
             return false;
         }
-        if (R + s > 10 || C + s > 10) {
+        if (r < 0 || r + s > 10 || c < 0 || c + s > 10) {
             return false;
         }
-        for (int r = R; r < R + s; r++) {
-            for (int c = C; c < C + s; c++) {
-                if (!board[r][c]) {
+        for (int nr = r; nr < r + s; nr++) {
+            for (int nc = c; nc < c + s; nc++) {
+                if (!arr[nr][nc]) {
                     return false;
                 }
             }
@@ -63,15 +69,15 @@ class Main {
         return true;
     }
 
-    static void paste(int R, int C, int s, boolean flag) {
+    static void put(int r, int c, int s, boolean flag) {
         if (flag) {
             paper[s]++;
         } else {
             paper[s]--;
         }
-        for (int r = R; r < R + s; r++) {
-            for (int c = C; c < C + s; c++) {
-                board[r][c] = flag;
+        for (int nr = r; nr < r + s; nr++) {
+            for (int nc = c; nc < c + s; nc++) {
+                arr[nr][nc] = flag;
             }
         }
     }
