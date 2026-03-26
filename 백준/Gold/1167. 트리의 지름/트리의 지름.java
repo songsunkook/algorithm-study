@@ -2,57 +2,61 @@ import java.io.*;
 import java.util.*;
 
 class Main {
-    static int V;
-    static List<N>[] adj;
+
+    static int v, dia, dep, depN;
+    static List<N>[] arr;
+    static boolean[] vis;
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 
-        V = Integer.parseInt(br.readLine());
-        adj = new ArrayList[V];
-        for (int i = 0; i < V; i++) {
-            adj[i] = new ArrayList<>();
+        v = Integer.parseInt(br.readLine());
+        arr = new List[v];
+        vis = new boolean[v];
+        for (int i = 0; i < v; i++) {
+            arr[i] = new ArrayList<>();
         }
-        for (int i = 0; i < V; i++) {
+        for (int i = 0; i < v; i++) {
             StringTokenizer st = new StringTokenizer(br.readLine());
-            int v = Integer.parseInt(st.nextToken());
+            int a = Integer.parseInt(st.nextToken()) - 1;
             while (true) {
-                int o = Integer.parseInt(st.nextToken());
-                if (o == -1)
+                int b = Integer.parseInt(st.nextToken()) - 1;
+                if (b == -2) {
                     break;
-                int d = Integer.parseInt(st.nextToken());
-                adj[v - 1].add(new N(o - 1, d));
-                adj[o - 1].add(new N(v - 1, d));
+                }
+                int c = Integer.parseInt(st.nextToken());
+                arr[a].add(new N(b, c));
+                arr[b].add(new N(a, c));
             }
         }
-        Line node1 = bfs(0);
-        Line node2 = bfs(node1.n);
-        bw.write(node2.total + "");
+
+        vis[0] = true;
+        dep = -1;
+        depN = -1;
+        dfs(0, 0);
+        Arrays.fill(vis, false);
+        vis[depN] = true;
+        dep = -1;
+        int aa = depN;
+        depN = -1;
+        dfs(aa, 0);
+        bw.write(dep + "");
         bw.close();
         br.close();
     }
 
-    static Line bfs(int start) {
-        boolean[] vis = new boolean[V];
-        Queue<Line> q = new LinkedList<>();
-        q.offer(new Line(start, 0));
-        vis[start] = true;
-        Line max = new Line(-1, -1);
-        while (!q.isEmpty()) {
-            Line cur = q.poll();
-            if (cur.total > max.total) {
-                max = cur;
-            }
-            for (N o : adj[cur.n]) {
-                if (!vis[o.n]) {
-                    vis[o.n] = true;
-                    q.offer(new Line(o.n, cur.total + o.d));
-                }
+    static void dfs(int now, int nowD) {
+        if (dep < nowD) {
+            dep = nowD;
+            depN = now;
+        }
+        for (N next : arr[now]) {
+            if (!vis[next.n]) {
+                vis[next.n] = true;
+                dfs(next.n, nowD + next.d);
             }
         }
-
-        return max;
     }
 
     static class N {
@@ -62,16 +66,6 @@ class Main {
         N(int nn, int dd) {
             n = nn;
             d = dd;
-        }
-    }
-
-    static class Line {
-        int n;
-        int total;
-
-        Line(int nn, int tt) {
-            n = nn;
-            total = tt;
         }
     }
 }
