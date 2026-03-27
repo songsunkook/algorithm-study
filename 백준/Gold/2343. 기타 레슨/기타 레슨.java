@@ -24,12 +24,11 @@ class Main {
         while (l < r) {
             int mid = (l + r) / 2;
             int cnt = func(mid);
-            if (cnt >= m) {
+            if (cnt > m) {
                 l = mid + 1;
             } else {
                 r = mid;
             }
-            // System.out.printf("(%d, %d): %d\n", l, r, cnt);
         }
         bw.write(l + "");
         bw.close();
@@ -38,7 +37,7 @@ class Main {
 
     static int func(int len) {
         int sum = 0;
-        int cnt = -1;
+        int cnt = 0;
         for (int i = 0; i < n; i++) {
             sum += arr[i];
             if (sum == len) {
@@ -49,12 +48,10 @@ class Main {
                 sum = arr[i];
                 cnt++;
             }
-            // System.out.printf("sum: %d, cnt: %d, len: %d\n", sum, cnt, len);
         }
         if (sum > 0) {
             cnt++;
         }
-        // System.out.println("cnt: " + cnt);
         return cnt;
     }
 }
