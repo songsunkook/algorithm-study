@@ -1,41 +1,34 @@
 import java.io.*;
 import java.util.*;
 
+/**
+ * 전체 거리 * 2 - 루트부터 마지막 노드까지의 거리
+ */
 class Main {
-
-    static int n;
-    static int[] l, r;
-
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 
-        n = Integer.parseInt(br.readLine());
-        l = new int[n];
-        r = new int[n];
-
+        int n = Integer.parseInt(br.readLine());
+        int[] l = new int[n + 1];
+        int[] r = new int[n + 1];
         for (int i = 0; i < n; i++) {
             StringTokenizer st = new StringTokenizer(br.readLine());
-            int a = Integer.parseInt(st.nextToken()) - 1;
-            int b = Integer.parseInt(st.nextToken()) - 1;
-            int c = Integer.parseInt(st.nextToken()) - 1;
+            int a = Integer.parseInt(st.nextToken());
+            int b = Integer.parseInt(st.nextToken());
+            int c = Integer.parseInt(st.nextToken());
             l[a] = b;
             r[a] = c;
         }
 
-        // DFS 하면서 전체 왕복 비용 계산
-        // 가장 마지막 노드를 방문했을 때는 복귀 비용 계산
-        // 리프노드 방문 시마다 lastLeaf를 갱신하면, 마지막 방문 리프 노드를 알 수 있다.
-        // 반환값: 편도 비용.
-        // 마지막 노드였으면 기존 합 + 편도 비용(not 왕복)
-
-        int total = n - 1;
-        int cur = 0, dep = 0;
-        while (r[cur] != -2) {
+        int cur = 1, dep = 0;
+        while (r[cur] != -1) {
             cur = r[cur];
             dep++;
         }
-        bw.write(total * 2 - dep + "");
+
+        // 전체 거리 = n - 1
+        bw.write((n - 1) * 2 - dep + "");
         bw.close();
         br.close();
     }
