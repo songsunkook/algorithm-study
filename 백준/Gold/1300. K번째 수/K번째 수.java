@@ -15,22 +15,29 @@ class Main {
         BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 
         int n = Integer.parseInt(br.readLine());
-        int a = Integer.parseInt(br.readLine());
+        int k = Integer.parseInt(br.readLine());
 
-        int l = 0, r = a;
+        int l = 0, r = k;
         while (l < r) {
             int mid = (l + r) / 2;
-            int sum = 0;
-            for (int dan = 1; dan <= n; dan++) {
-                sum += Math.min(mid / dan, n);
+            long cnt = 0;
+            // mid(cnt)보다 작은 수의 개수 구하기
+            for (int d = 1; d <= n; d++) {
+                cnt += Math.min(mid / d, n);
             }
-            if (sum < a) {
-                l = mid + 1;
-            } else {
+
+            // mid(cnt)보다 작은 수 개수가 k보다 큼 -> 줄여야 함.
+            // mid(cnt)보다 작은 수 개수가 k와 같음 -> 작은 수 개수가 같은 수는 여럿일 수 있다 -> 가장 작은 수를 구해야 한다. ->
+            // 줄여야 함.
+            if (cnt >= k) {
                 r = mid;
+            } else {
+                // mid(cnt)보다 작은 수 개수가 k보다 작음 -> 키워야 함.
+                l = mid + 1;
             }
         }
         bw.write(l + "");
+
         bw.close();
         br.close();
     }
