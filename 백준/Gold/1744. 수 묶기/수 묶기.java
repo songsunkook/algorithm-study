@@ -2,44 +2,59 @@ import java.io.*;
 import java.util.*;
 
 /**
- * 절대값이 큰 수끼리 곱해야 한다.
- * 음수를 감안해야 함. 음수는 음수끼리 곱해야 한다.
- * 정렬 이후, 양쪽 끝에서 둘씩 묶어서 더하면 마지막에는 0(중앙)에서 모일 것.
- * 엣지 케이스
- * - 0은 가장 작은 절댓값의 음수와 묶을 수 있지만 양수와 묶으면 안된다.
- * - 1은 묶지 않아야 한다.
+ * 절대값이 큰수끼리 묶는다.
+ * 양수도, 음수도.
+ * 
+ * 음수는 양수와 묶지 않는다.
+ * 
+ * 0은 묶지 않는다.(음수가 하나남았을 때는 묶는다)
+ * 1은 묶지 않는다.
  */
 class Main {
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 
+        PriorityQueue<Integer> min = new PriorityQueue<>((a, b) -> Integer.compare(a, b));
+        PriorityQueue<Integer> max = new PriorityQueue<>((a, b) -> Integer.compare(b, a));
+        int zero = 0;
+        int one = 0;
+
         int n = Integer.parseInt(br.readLine());
-        PriorityQueue<Integer> plus = new PriorityQueue<>((a, b) -> Integer.compare(b, a));
-        PriorityQueue<Integer> minus = new PriorityQueue<>();
-        long sum = 0;
         for (int i = 0; i < n; i++) {
             int a = Integer.parseInt(br.readLine());
             if (a > 1) {
-                plus.offer(a);
-            } else if (a == 1) {
-                sum += 1;
+                max.offer(a);
+            } else if (a < 0) {
+                min.offer(a);
+            } else if (a == 0) {
+                zero++;
             } else {
-                minus.offer(a);
+                one++;
             }
         }
-        while (plus.size() > 1) {
-            sum += plus.poll() * plus.poll();
+
+        long sum = 0;
+        while (min.size() > 1) {
+            int a = min.poll();
+            int b = min.poll();
+            sum += a * b;
         }
-        if (!plus.isEmpty()) {
-            sum += plus.poll();
+        while (max.size() > 1) {
+            int a = max.poll();
+            int b = max.poll();
+            sum += a * b;
         }
-        while (minus.size() > 1) {
-            sum += minus.poll() * minus.poll();
+        if (!max.isEmpty()) {
+            sum += max.poll();
         }
-        if (!minus.isEmpty()) {
-            sum += minus.poll();
+        if (!min.isEmpty()) {
+            if (zero == 0) {
+                sum += min.poll();
+            }
         }
+        sum += one;
+
         bw.write(sum + "");
         bw.close();
         br.close();
